@@ -1,4 +1,6 @@
 package soluzione;
+//EventoBean in modo di trasferire tutti gli oggetti come se fosse un'unico oggetto
+//questo perché l'evento è formato da vari oggetti 
 
 import java.util.Date;
 
@@ -11,6 +13,7 @@ public class Evento {
 	private double longitudine;
 	private double latidudine;
 	private StatoEmotivo statoEmotivo;
+	
 	public boolean isStatoRegistrazione() {
 		return statoRegistrazione;
 	}

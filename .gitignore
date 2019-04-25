@@ -1,1 +1,6 @@
 /bin/
+#ignoro i file comandi e eventi.txt che servono solo come file di input per testare il corretto funzionamento dell'applicazione
+comandi.txt
+eventi1.txt
+#Ignoro tutti i file .class ovvero tutti i compilati
+*.class

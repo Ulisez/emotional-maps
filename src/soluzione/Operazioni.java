@@ -1,19 +1,18 @@
 package soluzione;
 
 import java.util.ArrayList;
-//import java.util.List;
-import java.util.PriorityQueue;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
+//import java.io.IOException;
 import java.util.Queue;
 import java.util.LinkedList;
 
 public class Operazioni {
 
-	//public static List<Evento> eventi = new ArrayList<Evento>();
+	protected static List<Evento> eventi = new ArrayList<Evento>();
 	public static Queue<String> commandscoda = new LinkedList<String>();
 
 	/*Metodo per la gestione dei comandi
@@ -23,70 +22,95 @@ public class Operazioni {
 	public static void handleCommands(String fileName) {
 		   String commandString;
 		try(BufferedReader readerFile = new BufferedReader(new FileReader(fileName))) {
-		while ((commandString = readerFile.readLine()) !=null) {
+		     
+			int index = 0;
+		     
+			while ((commandString = readerFile.readLine()) !=null) {
 		    System.out.println(commandString);
+		    index++;
 		     //processCommand(commandString);
-		    if(validationCommand(commandString)) { 
-		    commandscoda.add(commandString);
-		     }
-			}
-		while(!commandscoda.isEmpty()) {
-			System.out.println("");
-			System.out.println(commandscoda.poll());
-		}
-		} catch (Exception e) {
+		    if(validationFormatCommand(commandString))  //invio il numero della riga che non rispetta il formatto
+		        commandscoda.add(commandString);
+		    else
+		    	System.err.println(" La Stringa " +commandString + " (Riga " + index + " del file) non rispetta il formato desiderato");
+		      }
+		
+		}catch (Exception e) {
 			 System.err.println(e.getMessage());
 			    }
-			}
 		
-    private static void processCommand(String commandString) {
-		Pattern pattern = null;
-
-		String regexImport = "^import\\((.*?)\\)$";
-
-		pattern = Pattern.compile(regexImport);
-		Matcher matcher = pattern.matcher(commandString);
-
-		boolean found = false;
-		while (matcher.find()) {
-			found = true;
-			//String eventFileName = matcher.group(1);
-		}
-
-		if (!found) {
-			regexImport = "^create_map\\((\\d{8}?)-(\\d{8}?)\\)$";
-			pattern = Pattern.compile(regexImport);
-			matcher = pattern.matcher(commandString);
-			while (matcher.find()) {
-				String da = matcher.group(1);
-				String a = matcher.group(2);
-			}
-		}
-
+		/*while(!commandscoda.isEmpty()) {
+			System.out.println("");
+			System.out.println(commandscoda.peek());
+			} Questo metodo l'uso solo per stampare gli elementi all'interno della coda*/
+		processCommand();
 	}
+		
+   
 	
-	//vedere la funzionalita di split in modo di vedere se è possibile gestire due esprissioni regolari con un'unico oggetto
-    private static boolean validationCommand(String commandString) {
-		boolean validation=false;
+	private static void processCommand() {
+		
+		Pattern pattern=null;
+		String command;
+		Matcher matcher;
+		while(!commandscoda.isEmpty()) {
+			command = commandscoda.poll();
+			System.err.println("Sono entrato nel while di processCommand, sto svuotando la coda " + command);
+            pattern = Pattern.compile("^import\\((.*?)\\)$");
+            matcher = pattern.matcher(command);
+            boolean found = false;
+			     while(matcher.find()) {
+			    	 found = true;
+				 System.out.println("sono all'interno del while di matcher " + matcher.group(1));
+			     String eventFileName = matcher.group(1);
+			     Import(eventFileName);
+					 }
+				if(!found){ 
+			      System.out.println("sono entrato qui");
+				 pattern = Pattern.compile("^create_map\\((\\d{8}?)-(\\d{8}?)\\)$");
+				 matcher = pattern.matcher(command);
+				  while(matcher.find()) {
+					 System.out.println("sono un bel create MAP");
+					 //String fromDate = 
+							 System.out.println("DA " +matcher.group(1)+ " A " +matcher.group(2));
+					 //String toDate = 
+						
+				  }
+					 //create_Map(fromDate,toDate);
+				 }
+			 }		
+		}
+	
+	
+	private static boolean validationFormatCommand(String commandString) {
+	    
 		String regexImport = "^import\\((.*?)\\)$";
 		String regexCreateMap = "^create_map\\((\\d{8}?)-(\\d{8}?)\\)$";
-		Pattern patternImport = Pattern.compile(regexImport);
-		Matcher matcherImport = patternImport.matcher(commandString);
-		Pattern patternCreate = Pattern.compile(regexCreateMap);
-		Matcher matcherCreate = patternCreate.matcher(commandString);
-	
-		if(matcherImport.matches() || matcherCreate.matches()) {
-			validation = true;
-			return validation;
+		
+		if(Pattern.matches(regexImport, commandString) || Pattern.matches(regexCreateMap, commandString)){
+			return true;
 			}
-		else {
-			System.err.println("La Stringa "+commandString + " non rispetta il formato desiderato");
+		else 
 			return false;
 		}
+    
+    
+	private static void Import(String eventFileName) {
+	   String event;
+	   
+		try(BufferedReader readerEvent = new BufferedReader(new FileReader(eventFileName))){
+		   while((event = readerEvent.readLine()) != null) {
+			   System.out.println(event);
+			   
+		   }
+		   
+	   }catch(Exception e) {
+		   System.out.println(e.getMessage());
+	   }
 	}
-	
-    /*  public static void import(String eventFileName) {
-	 
-	}*/
+    
+    /*private static void createMap() {
+    	
+    }*/
 
 }
