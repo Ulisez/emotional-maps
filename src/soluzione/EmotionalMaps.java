@@ -1,16 +1,30 @@
-//Sanchez Perez Ulises Ezequiel 731583
+/* Sanchez Perez Ulises Ezequiel 731583
+   Selma 
+   Alice */
 
 package soluzione;
 
+/**
+ * La classe EmotionalMaps è la classe principale dell'applicazione
+ * @author ulise
+ *
+ */
+
 public class EmotionalMaps {
 
+	/**
+	 * Il metodo main l'unica cosa che fa è controllare che venga passato un parametro
+	 * (il nome del file dal quale leggere i comandi), se non viene passato nessun pamatro
+	 * visualizza un messeggario d'errore. 
+	 */
 	public static void main(String[] args) {
 		
-		//Verificazione dell'esistenza di una stringa passata come parametro al metodo main
+   //Verifica dell'esistenza di una stringa passata come parametro
 		try{ 
-		Operazioni.handleCommands(args[0]);
+		Operations.handleCommands(args[0]);
 		}catch(Exception e) {
 			System.err.println("Non è stato inserito nessun percorso");
 			}
+		
 		}
 	}

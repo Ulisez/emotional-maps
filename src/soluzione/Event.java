@@ -1,18 +1,24 @@
 package soluzione;
-//EventoBean in modo di trasferire tutti gli oggetti come se fosse un'unico oggetto
-//questo perché l'evento è formato da vari oggetti 
 
 import java.util.Date;
 
-public class Evento {
+/**
+ * 
+ * @author ulise
+ * Rappresenta l'evento 
+ *  
+ *
+ */
+
+public class Event {
  
-	private boolean statoRegistrazione;
-	private boolean statoUtente;
-	private Date data;
-	private String idUtente;
-	private double longitudine;
-	private double latidudine;
-	private StatoEmotivo statoEmotivo;
+	private boolean statoRegistrazione; // 0 significa che l'utente non è registrato, 1 altrimenti
+	private boolean statoUtente;        // 0 significa che l'utente non era loggato, 1 altrimenti
+	private Date data;                 //La data di quando è stato effettuato l'evento
+	private String idUtente;           //Codice identificativo dell'utente
+	private double longitudine;       /* Cordinate, rappresentazio la posizione dell'utente*/
+	private double latidudine;          
+	private char statoEmotivo;       //Rappresenta lo stato emotivo dell'utente 
 	
 	public boolean isStatoRegistrazione() {
 		return statoRegistrazione;
@@ -50,10 +56,10 @@ public class Evento {
 	public void setLatidudine(double latidudine) {
 		this.latidudine = latidudine;
 	}
-	public StatoEmotivo getStatoEmotivo() {
+	public char getStatoEmotivo() {
 		return statoEmotivo;
 	}
-	public void setStatoEmotivo(StatoEmotivo statoEmotivo) {
+	public void setStatoEmotivo(char statoEmotivo) {
 		this.statoEmotivo = statoEmotivo;
 	}
 	
