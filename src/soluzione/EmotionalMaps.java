@@ -1,6 +1,7 @@
 /* Sanchez Perez Ulises Ezequiel 731583
    Selma 
-   Alice */
+   Alice 
+   Ismael */
 
 package soluzione;
 

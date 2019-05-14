@@ -4,12 +4,10 @@ package soluzione;
 //import java.util.Set;
 
 /**
- * 
+ * Gli oggetti di questa classe rappresentano dei punti d'interesse
  * @author ulise
- *Questa classe rappresenta un punto di interesse
  */
-
-public class PointOfInterest {
+ public class PointOfInterest {
  
 	private long latitudine;
 	private long longitudione;
