@@ -7,6 +7,7 @@ import java.util.Date;
 /**
  * La classe Event rappresenta un evento. Un'istanza di questa classe contiene
  * le informazioni di un determinato evento.
+ * 
  * @author ulise
  * @version 1.0
  */
@@ -18,9 +19,10 @@ public class Event implements Comparable<Event> {
 	private String stateUser;
 	private Date date;
 	private String idUser;
-	private double longitudine;
-	private double latitudine;
-	private char statoEmotivo;
+	//private double longitudine;
+	//private double latitudine;
+	private CoordinateGeografiche coordinate = new CoordinateGeografiche();
+	private String statoEmotivo;
 
 	/**
 	 * Unico costruttore della classe, crea un'istanza della classe event
@@ -36,20 +38,20 @@ public class Event implements Comparable<Event> {
 	 *                        se la data, longitudine e latitudine non rispettano il
 	 *                        formatto adeguato.
 	 */
-	public Event(String register, String stateUser, String date, String id, String longitudine, String latitudine,
+	public Event(String register, String stateUser, String date, String id, String latitude, String longitude,
 			String emozione) throws EventException {
 		setStateRegister(register);
 		setStatoUtente(stateUser);
 		setData(date);
 		setIdUtente(id);
-		setLatitudine(latitudine);
-		setLongitudine(longitudine);
+		coordinate = new CoordinateGeografiche(latitude,longitude);
 		setStatoEmotivo(emozione);
 
 	}
 
 	/**
 	 * Restuisce lo stato della registrazione dell'utente
+	 * 
 	 * @return Stato registraione all'applicazione
 	 */
 	public String getStateRegister() {
@@ -59,6 +61,7 @@ public class Event implements Comparable<Event> {
 	/**
 	 * Modifica lo stato di registrazione dell'utente IN utente registrato - OUT
 	 * utente non registrato
+	 * 
 	 * @param statoRegistrazione stato di registrazione(IN o OUT )
 	 */
 	public void setStateRegister(String statoRegistrazione) {
@@ -67,6 +70,7 @@ public class Event implements Comparable<Event> {
 
 	/**
 	 * Restituisce lo stato d'attivazione dell'utente per quel evento
+	 * 
 	 * @return stato attivazione utente
 	 */
 	public String getStateUser() {
@@ -76,6 +80,7 @@ public class Event implements Comparable<Event> {
 	/**
 	 * Modifica lo stato di attivazione dell'utente per quel evento, non viene fatto
 	 * nessun controllo perché viene già effettuato tramite l'espressione regolare
+	 * 
 	 * @param statoUtente
 	 */
 	public void setStatoUtente(String statoUtente) {
@@ -84,6 +89,7 @@ public class Event implements Comparable<Event> {
 
 	/**
 	 * Restitusice la data dell'evento che esegue il metodo
+	 * 
 	 * @return data dell'evento
 	 */
 	public Date getData() {
@@ -93,9 +99,11 @@ public class Event implements Comparable<Event> {
 	/**
 	 * Modifica la data dell'evento, viene effettuato un controllo sulla data e la
 	 * conversione da String a Date
+	 * 
 	 * @param data La data in tipo stringa
 	 * @throws EventException se la data passata come parametro non rappresenta una
-	 *data corretta oppure se non rispetta il formatto derideto GGMMAAAA
+	 *                        data corretta oppure se non rispetta il formatto
+	 *                        derideto GGMMAAAA
 	 */
 	public void setData(String data) throws EventException {
 		if (validateDate(data) != null)
@@ -132,44 +140,45 @@ public class Event implements Comparable<Event> {
 	 * 
 	 * @return longitudine dell'evento
 	 */
-	public double getLongitudine() {
+	/*public double getLongitudine() {
 		return longitudine;
-	}
+	}*/
 
 	/**
 	 * 
 	 * @param longitudine
 	 * @throws EventException
 	 */
-	public void setLongitudine(String longitudine) throws EventException {
+	/*public void setLongitudine(String longitudine) throws EventException {
 		try {
 			this.longitudine = Double.parseDouble(longitudine);
 		} catch (Exception e) {
 			throw new EventException("Longitudine non corretta");
 		}
-	}
+	}*/
 
 	/**
 	 * Restituisce la latitudine dell'evento che esegue il metodo
 	 * 
 	 * @return latitudine
 	 */
-	public double getLatidudine() {
+	/*public double getLatidudine() {
 		return latitudine;
-	}
+	}*/
 
 	/**
+	 * Setta(Modifica) la latitudine dell'evento che esegue il metodo
 	 * 
 	 * @param latitudine
 	 * @throws EventException
 	 */
-	public void setLatitudine(String latitudine) throws EventException {
+	/*public void setLatitudine(String latitudine) throws EventException {
 		try {
 			this.latitudine = Double.parseDouble(latitudine);
 		} catch (Exception e) {
 			throw new EventException("Latitudine non corretta");
 		}
-	}
+	}*/
 
 	/**
 	 * Restutisce lo stato emotivo dell'utente associato all'evento che esegue il
@@ -177,16 +186,17 @@ public class Event implements Comparable<Event> {
 	 * 
 	 * @return lo stato emotivo dell'utente
 	 */
-	public char getStatoEmotivo() {
+	public String getStatoEmotivo() {
 		return statoEmotivo;
 	}
 
 	/**
+	 * Setta lo stato emotivo dell'utente
 	 * 
 	 * @param statoEmotivo
 	 */
 	public void setStatoEmotivo(String statoEmotivo) {
-		this.statoEmotivo = statoEmotivo.charAt(0);
+		this.statoEmotivo = statoEmotivo;
 	}
 
 	/**
@@ -219,13 +229,32 @@ public class Event implements Comparable<Event> {
 	 */
 	public String toString() {
 		return "Event [stateRegister=" + stateRegister + ", stateUser=" + stateUser + ", date=" + date + ", idUser="
-				+ idUser + ", longitudine=" + longitudine + ", latitudine=" + latitudine + ", statoEmotivo="
+				+ idUser + ", latitudine =" +coordinate.getLatitude() +", longitudine=" +coordinate.getLongitude() + ", statoEmotivo="
 				+ statoEmotivo + "]";
 	}
 
-	@Override
-	public int compareTo(Event o) {
+	/**
+	 * Confronta due eventi e indica se sono uguali o meno
+	 * 
+	 * @param other - L'evento con cui viene confrontato l'evento che esegue il
+	 *              metodo
+	 * @return restituisce true se due eventi sono uguali, due eventi sono uguali se
+	 *         hanno le stesse coordinate, lo stesso ID, la stessa data e lo stesso
+	 *         stato emotivo. Altrimenti restituisce false
+	 */
+	public boolean equals(Event other) {
+		if (other != null && (this.getData().equals(other.getData())) && 
+				this.coordinate.equals(other.coordinate) && 
+				this.getIdUtente().equals(other.getIdUtente())
+				&& (this.getStatoEmotivo().equals(other.getStatoEmotivo())))
+			return true;
+		else
+			return false;
+	}
 
+	@Override
+	public int compareTo(Event other) {
+      
 		return 0;
 	}
 

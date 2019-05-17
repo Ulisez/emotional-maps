@@ -9,29 +9,24 @@ package soluzione;
  */
  public class PointOfInterest {
  
-	private long latitudine;
-	private long longitudione;
+	private CoordinateGeografiche coordinate;
 	private String nome;
 	//private Set<Evento> events;
 	
-	public long getLatitudine() {
-		return latitudine;
+	public PointOfInterest(String nome, double latitude, double longitude) {
+		this.nome = nome;
+		this.coordinate = new CoordinateGeografiche(latitude,longitude);
 	}
-	public void setLatitudine(long latitudine) {
-		this.latitudine = latitudine;
-	}
-	public long getLongitudione() {
-		return longitudione;
-	}
-	public void setLongitudione(long longitudione) {
-		this.longitudione = longitudione;
-	}
+	
 	public String getNome() {
 		return nome;
 	}
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	
+    
+	public CoordinateGeografiche getCordinate() {
+		return coordinate;
+	}
 	
 }

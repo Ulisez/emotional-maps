@@ -58,6 +58,7 @@ public class Operations {
 
 		processCommand();
 		
+		//Stampa lista eventi, solo per verifica
 		for(Event e: events) {
 			System.out.println(e.toString());
 		}
