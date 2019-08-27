@@ -3,6 +3,7 @@ package soluzione;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+//import java.util.TreeSet;
 
 /**
  * La classe Event rappresenta un evento. Un'istanza di questa classe contiene
@@ -16,12 +17,12 @@ public class Event implements Comparable<Event> {
 	// private boolean statoRegistrazione;
 	// private boolean statoUtente;
 	private String stateRegister;
-	private String stateUser;
+	private boolean stateUser;
 	private Date date;
 	private String idUser;
-	//private double longitudine;
-	//private double latitudine;
-	private CoordinateGeografiche coordinate = new CoordinateGeografiche();
+	// private double longitudine;
+	// private double latitudine;
+	private CoordinateGeografiche coordinate;
 	private String statoEmotivo;
 
 	/**
@@ -44,7 +45,7 @@ public class Event implements Comparable<Event> {
 		setStatoUtente(stateUser);
 		setData(date);
 		setIdUtente(id);
-		coordinate = new CoordinateGeografiche(latitude,longitude);
+		coordinate = new CoordinateGeografiche(latitude, longitude);
 		setStatoEmotivo(emozione);
 
 	}
@@ -73,7 +74,7 @@ public class Event implements Comparable<Event> {
 	 * 
 	 * @return stato attivazione utente
 	 */
-	public String getStateUser() {
+	public boolean getStateUser() {
 		return stateUser;
 	}
 
@@ -84,7 +85,10 @@ public class Event implements Comparable<Event> {
 	 * @param statoUtente
 	 */
 	public void setStatoUtente(String statoUtente) {
-		this.stateUser = statoUtente;
+		if (statoUtente.equals("LOGIN"))
+			this.stateUser = true;
+		else
+			this.stateUser = false;
 	}
 
 	/**
@@ -140,31 +144,29 @@ public class Event implements Comparable<Event> {
 	 * 
 	 * @return longitudine dell'evento
 	 */
-	/*public double getLongitudine() {
-		return longitudine;
-	}*/
+	/*
+	 * public double getLongitudine() { return longitudine; }
+	 */
 
 	/**
 	 * 
 	 * @param longitudine
 	 * @throws EventException
 	 */
-	/*public void setLongitudine(String longitudine) throws EventException {
-		try {
-			this.longitudine = Double.parseDouble(longitudine);
-		} catch (Exception e) {
-			throw new EventException("Longitudine non corretta");
-		}
-	}*/
+	/*
+	 * public void setLongitudine(String longitudine) throws EventException { try {
+	 * this.longitudine = Double.parseDouble(longitudine); } catch (Exception e) {
+	 * throw new EventException("Longitudine non corretta"); } }
+	 */
 
 	/**
 	 * Restituisce la latitudine dell'evento che esegue il metodo
 	 * 
 	 * @return latitudine
 	 */
-	/*public double getLatidudine() {
-		return latitudine;
-	}*/
+	/*
+	 * public double getLatidudine() { return latitudine; }
+	 */
 
 	/**
 	 * Setta(Modifica) la latitudine dell'evento che esegue il metodo
@@ -172,13 +174,11 @@ public class Event implements Comparable<Event> {
 	 * @param latitudine
 	 * @throws EventException
 	 */
-	/*public void setLatitudine(String latitudine) throws EventException {
-		try {
-			this.latitudine = Double.parseDouble(latitudine);
-		} catch (Exception e) {
-			throw new EventException("Latitudine non corretta");
-		}
-	}*/
+	/*
+	 * public void setLatitudine(String latitudine) throws EventException { try {
+	 * this.latitudine = Double.parseDouble(latitudine); } catch (Exception e) {
+	 * throw new EventException("Latitudine non corretta"); } }
+	 */
 
 	/**
 	 * Restutisce lo stato emotivo dell'utente associato all'evento che esegue il
@@ -199,6 +199,10 @@ public class Event implements Comparable<Event> {
 		this.statoEmotivo = statoEmotivo;
 	}
 
+	public CoordinateGeografiche getCoordinate() {
+		return coordinate;
+	}
+
 	/**
 	 * Converte la stringa che rappresenta la data dell'evento nel formatto
 	 * Giorno/Mese/Anno se la stringa non rispetta il formatto adeguato o se la data
@@ -210,13 +214,13 @@ public class Event implements Comparable<Event> {
 	 */
 	private Date validateDate(String date) {
 		SimpleDateFormat formatDate = new SimpleDateFormat("ddMMyyyy");
+
 		formatDate.setLenient(false); // controllo rigosoro sulla data
 		Date dateEvent;
 
 		try {
 			dateEvent = formatDate.parse(date);
 			return dateEvent;
-
 		} catch (ParseException e) {
 		}
 		return null;
@@ -229,8 +233,7 @@ public class Event implements Comparable<Event> {
 	 */
 	public String toString() {
 		return "Event [stateRegister=" + stateRegister + ", stateUser=" + stateUser + ", date=" + date + ", idUser="
-				+ idUser + ", latitudine =" +coordinate.getLatitude() +", longitudine=" +coordinate.getLongitude() + ", statoEmotivo="
-				+ statoEmotivo + "]";
+				+ idUser + coordinate.toString() + ", statoEmotivo=" + statoEmotivo + "]";
 	}
 
 	/**
@@ -243,9 +246,8 @@ public class Event implements Comparable<Event> {
 	 *         stato emotivo. Altrimenti restituisce false
 	 */
 	public boolean equals(Event other) {
-		if (other != null && (this.getData().equals(other.getData())) && 
-				this.coordinate.equals(other.coordinate) && 
-				this.getIdUtente().equals(other.getIdUtente())
+		if (other != null && (this.getData().equals(other.getData())) && this.coordinate.equals(other.coordinate)
+				&& this.getIdUtente().equals(other.getIdUtente())
 				&& (this.getStatoEmotivo().equals(other.getStatoEmotivo())))
 			return true;
 		else
@@ -254,8 +256,17 @@ public class Event implements Comparable<Event> {
 
 	@Override
 	public int compareTo(Event other) {
-      
-		return 0;
+		if (other != null)
+			if (this.date.compareTo(other.date) != 0) {
+				return this.date.compareTo(other.date);
+			} else {
+				if (this.idUser.compareTo(other.idUser) != 0) {
+					return this.idUser.compareTo(other.idUser);
+				} else
+					return this.statoEmotivo.compareTo(other.statoEmotivo);
+			}
+		else
+			return 0;
 	}
 
 }

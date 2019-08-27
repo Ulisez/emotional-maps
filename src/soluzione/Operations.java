@@ -2,13 +2,19 @@
 package soluzione;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+//import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 //import java.io.IOException;
 import java.util.Queue;
+import java.util.TreeSet;
 import java.util.LinkedList;
 
 /**
@@ -27,15 +33,23 @@ public class Operations {
 	private static final Pattern Event_Pattern = Pattern
 			.compile("^(IN|OUT) (LOGIN|LOGOUT) (\\d{8}) (.*?) (\\d.*),(\\d.*) (A|F|S|T|N)$");
 
-	protected static List<Event> events = new ArrayList<Event>();
-
+	// protected static TreeSet<Event> events = new TreeSet<Event>();
+	protected static List<PointOfInterest> points = new ArrayList<>();
 	public static Queue<String> commands = new LinkedList<String>();
+
+	private static void setPoints() {
+		points.add(new PointOfInterest("Duomo", 45.464, 9.190));
+		points.add(new PointOfInterest("Arco della Pace", 45.473, 9.173));
+		points.add(new PointOfInterest("Navigli", 45.458, 9.181));
+
+	}
 
 	/**
 	 * Legge i comandi dal file di testo passato come parametro, controlla se il
 	 * file esiste, in caso positivo legge i comandi e li salva all'interno di una
 	 * coda solo se rispettano il formatto adeguato, invece se il file non esiste
 	 * viene stampato un messaggio d'errore
+	 * 
 	 * @param fileName - Il nome del file dal quale leggere i comandi
 	 */
 	public static void handleCommands(String fileName) {
@@ -55,14 +69,18 @@ public class Operations {
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 		}
-
+		setPoints();
 		processCommand();
-		
-		//Stampa lista eventi, solo per verifica
-		for(Event e: events) {
-			System.out.println(e.toString());
-		}
 
+		// Stampa lista eventi, solo per verifica
+		for (PointOfInterest i : points) {
+			System.out.println(i.toString());
+			if (!(i.getListEvents().isEmpty())) {
+				System.out.println(i.getListEvents().size());
+				
+
+			}
+		}
 	}
 
 	/**
@@ -105,7 +123,8 @@ public class Operations {
 	 * corrispodente, l'evento creato viene salvato in una struttura dati. In caso
 	 * contratio ovvero se la stringa non rispetta il formatto, viene ignorata e si
 	 * passa alla lettura della stringa successiva.
-	 *  @param eventFileName - File dal quale importare gli eventi
+	 * 
+	 * @param eventFileName - File dal quale importare gli eventi
 	 */
 	private static void Import(String eventFileName) {
 		String evento;
@@ -116,33 +135,65 @@ public class Operations {
 					Matcher matEvent = Event_Pattern.matcher(evento);
 					while (matEvent.find()) {
 						try {
-						events.add(new Event(matEvent.group(1), matEvent.group(2), matEvent.group(3), matEvent.group(4),
-								matEvent.group(5), matEvent.group(6), matEvent.group(7)));
-						}catch(EventException e) {
-							System.out.println(e.getMessage());
+							System.out.println("Sono arrivato qui");
+							putEvent(new Event(matEvent.group(1), matEvent.group(2), matEvent.group(3),
+									matEvent.group(4), matEvent.group(5), matEvent.group(6), matEvent.group(7)));
+
+						} catch (EventException e) {
+							System.out.println("HAHAHAHA");
+							System.out.println(e.fillInStackTrace());
 						}
 					}
 
 				}
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.out.println("HAHAHAHAmimimimi");
+			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * Crea la mappa emozionale
+	 * 
 	 * @param fromdate
 	 * @param todate
 	 */
-	private static void createMap(String fromdate, String todate) {
-		System.out.println(fromdate + " ," + todate);
+	private static void createMap(String fromdate, String todate){
+
+		SimpleDateFormat formatDate = new SimpleDateFormat("ddMMyyyy");
+		Date initial, finit;
+		formatDate.setLenient(false);
+		System.out.println(fromdate +","+ todate);
+		List<String> result = new ArrayList<String>();
+		//Converto le date da formato stringhe in formato date
+		try {
+			
+			initial = formatDate.parse(fromdate);
+			finit = formatDate.parse(todate);
+		System.out.println("*****Mappa Emozionale di tutti gli utenti***** ");	
+			for(PointOfInterest point: points) {
+				result.add(point.createMapAll(initial, finit));
+			}
+			
+		System.out.println("\n *****Mappa Emozionale degli utenti Attivi*****");
+			for(String re: result) {
+				System.out.println(re);
+			}
+			
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			System.out.println("La rappresentazione della data è sbagliata");
+		}
+		
 	}
 
 	/**
 	 * controlla il formatto del comando letto dal file utilizzando le espressioni
 	 * regolari Se il comando passato come parametro rispetta uno dei due formati
 	 * desiderati il metodo restituisce true in caso contrario restituisce false
+	 * 
 	 * @param commandString - Stringa da validare
 	 * @return boolean - esito della validazione
 	 */
@@ -152,6 +203,29 @@ public class Operations {
 			return true;
 		} else
 			return false;
+	}
+
+	private static double[] distanceEventsToPoints(Event o) {
+
+		double[] distances = new double[3];
+
+		for (int i = 0; i < 3; i++) {
+			double distance = o.getCoordinate().distanceTo(points.get(i).getCordinate());
+			distances[i] = distance;
+		}
+		return distances;
+	}
+
+	private static void putEvent(Event o) {
+		double distancemax = 2.5;
+		double[] ranges = distanceEventsToPoints(o);
+		if (ranges[0] <= ranges[1] && ranges[0] <= ranges[2] && ranges[0] <= distancemax) {
+			points.get(0).addEvent(o);
+		} else if (ranges[1] <= ranges[0] && ranges[1] <= ranges[0] && ranges[1] <= distancemax) {
+			points.get(1).addEvent(o);
+		} else if (ranges[2] <= ranges[0] && ranges[2] <= ranges[1] && ranges[2] <= distancemax) {
+			points.get(2).addEvent(o);
+		}
 	}
 
 }

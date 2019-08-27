@@ -4,34 +4,35 @@
 package soluzione;
 
 /**
- * La classe coordinateGeografiche rappresenta un determinato punto sulla terra, ogni punto 
- * è caratterizzato da due parametri Latitudine e Longitudine
+ * La classe coordinateGeografiche rappresenta un determinato punto sulla terra,
+ * ogni punto è caratterizzato da due parametri Latitudine e Longitudine
+ * 
  * @author Ulises Sanchez
  *
  */
-public class CoordinateGeografiche {
+public class CoordinateGeografiche{
 
 	private double latitude;
 	private double longitude;
 
-	public CoordinateGeografiche() {
-		super();
-	}
-      /**
-       * Crea un'istanza della classe CoordinateGeografiche 
-       * @param latitude 
-       * @param longitude
-       */
+	
+	/**
+	 * Crea un'istanza della classe CoordinateGeografiche
+	 * 
+	 * @param latitude
+	 * @param longitude
+	 */
 	public CoordinateGeografiche(double latitude, double longitude) {
 
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}
-        /**
-         * 
-         * @param latitude
-         * @param longitude
-         */
+
+	/**
+	 * 
+	 * @param latitude
+	 * @param longitude
+	 */
 	public CoordinateGeografiche(String latitude, String longitude) {
 		try {
 			this.latitude = Double.parseDouble(latitude);
@@ -90,27 +91,37 @@ public class CoordinateGeografiche {
 	 * Calcola e restituisce la distanza in kilometri tra due punti geografici.
 	 * L'algoritmo utilizzato si basa sulla formula di Haversine che permette
 	 * appunto di calcolare la distanza tra due punti sulla terra.
+	 * 
 	 * @param other rappresenta il punto geografico con nel quale calcolare la
-	 * distanza
+	 *              distanza
 	 * @return distanza in chilometri tra due punti geografici
 	 */
-	public double distance(CoordinateGeografiche other) {
+	public double distanceTo(CoordinateGeografiche other) {
 		double AVERAGE_RADIUS_OF_EARTH_KM = 6372.795477598;
-		double distance;                                                     // Il calcolo viene effetuato in radianti.
+		double distance; // Il calcolo viene effetuato in radianti.
 
-		double latDistance = Math.toRadians(this.latitude - other.latitude);//calcola la differenza tra le latitudine delle due coordinate
-																				
-		double lngDistance = Math.toRadians(this.longitude - other.longitude);//Calcola la differenza tra longitudine delle due coordinate
-		
-	    double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-	    	      + Math.cos(Math.toRadians(this.latitude)) * Math.cos(Math.toRadians(other.latitude))
-	    	      * Math.sin(lngDistance / 2) * Math.sin(lngDistance / 2); 
-	    
-	    double calculate = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-	    
-	    distance =  (Math.round(AVERAGE_RADIUS_OF_EARTH_KM*calculate));
-	    
+		double latDistance = Math.toRadians(this.latitude - other.latitude);// calcola la differenza tra le latitudine
+																			// delle due coordinate
+
+		double lngDistance = Math.toRadians(this.longitude - other.longitude);// Calcola la differenza tra longitudine
+																				// delle due coordinate
+
+		double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) + Math.cos(Math.toRadians(this.latitude))
+				* Math.cos(Math.toRadians(other.latitude)) * Math.sin(lngDistance / 2) * Math.sin(lngDistance / 2);
+
+		double calculate = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+		distance = (Math.round(AVERAGE_RADIUS_OF_EARTH_KM * calculate));
+
 		return distance;
 	}
+
+	@Override
+	public String toString() {
+		return " latitude = " + latitude + ", longitude = " + longitude;
+	}
+	
+	
+
 
 }

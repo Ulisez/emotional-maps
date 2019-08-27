@@ -25,6 +25,7 @@ public class EmotionalMaps {
 		Operations.handleCommands(args[0]);
 		}catch(Exception e) {
 			System.err.println("Non è stato inserito nessun percorso");
+			//e.printStackTrace();
 			}
 		
 		}
