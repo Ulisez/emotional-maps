@@ -1,7 +1,6 @@
 /* Sanchez Perez Ulises Ezequiel 731583
    Selma 
-   Alice 
-   Ismael */
+   Alice */
 
 package soluzione;
 
@@ -14,18 +13,19 @@ package soluzione;
 public class EmotionalMaps {
 
 	/**
-	 * Il metodo main l'unica cosa che fa è controllare che venga passato un parametro
-	 * (il nome del file dal quale leggere i comandi), se non viene passato nessun pamatro
-	 * visualizza un messeggario d'errore. 
+	 * Il main passa al metodo handleCommands della classe "Operations" 
+	 * la prima stringa che li viene fornita come input tramite la linea di comandi. 
+	 * Tale Stringa rappresenta il percorso del file dal quale leggere i comandi. Se non viene passato nessun percorso
+	 * come parametro oppure se il percorso inserito è sbagliato viene visualizzto un messeggaio d'errore 
+	 * con la corrispettiva causa.
+	 * 
 	 */
 	public static void main(String[] args) {
-		
-   //Verifica dell'esistenza di una stringa passata come parametro
 		try{ 
 		Operations.handleCommands(args[0]);
 		}catch(Exception e) {
 			System.err.println("Non è stato inserito nessun percorso");
-			//e.printStackTrace();
+			
 			}
 		
 		}
