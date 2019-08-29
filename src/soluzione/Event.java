@@ -120,16 +120,16 @@ public class Event implements Comparable<Event> {
 	/**
 	 * Restituisce lo stato di registrazione dell'utente assoviato all'evento.
 	 *   
-	 * @return - true se l'utente è registrato, FALSE in caso contrario.
+	 * @return boolean - true se l'utente è registrato, FALSE in caso contrario.
 	 */
 	public boolean getstateRegister() {
 		return stateRegister;
 	}
 
 	/**
-	 * Restituisce lo stato d'attivazione dell'utente per quel evento
+	 * Restituisce lo stato d'attivazione dell'utente associato all'evento che esegue il metodo
 	 * 
-	 * @return stateUser - stato attivazione utente
+	 * @return boolean - stato d'attivazione dell'utente, True se attivo false altrimenti
 	 */
 	public boolean getStateUser() {
 		return stateUser;
@@ -137,8 +137,7 @@ public class Event implements Comparable<Event> {
 
 	/**
 	 * Restitusice la data dell'evento che esegue il metodo
-	 * 
-	 * @return date - data dell'evento
+	 * @return Date - data dell'evento
 	 */
 	public Date getDate() {
 		return date;
@@ -147,7 +146,7 @@ public class Event implements Comparable<Event> {
 	/**
 	 * Restituisce il codice identificativo dell'utente
 	 * 
-	 * @return idUser - id dell'utente
+	 * @return String - id dell'utente
 	 */
 	public String getIdUser() {
 		return idUser;
@@ -155,9 +154,9 @@ public class Event implements Comparable<Event> {
 
 	/**
 	 * Restutisce lo stato emotivo dell'utente associato all'evento che esegue il
-	 * metodo
+	 * metodo.
 	 * 
-	 * @return statomEmotivo - lo stato emotivo dell'utente
+	 * @return String - Lo stato emotivo dell'utente
 	 */
 	public String getEmotion() {
 		return emotionalState;
@@ -165,8 +164,8 @@ public class Event implements Comparable<Event> {
 
 	
    /**
-    *  Restituisce la coordinata geografica dell'evento 
-    * @return coordinate - Oggetto ti tipo coordinata che rappresenta la coordinata: Attitudine e Longitudine del luogo 
+    * Restituisce la coordinata geografica dell'evento  
+    * @return Coordinate - Oggetto ti tipo coordinata che rappresenta la coordinata: Attitudine e Longitudine del luogo 
     * dove si è svolto l'evento
     * 
     */

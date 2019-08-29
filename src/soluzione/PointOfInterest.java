@@ -7,17 +7,23 @@ import java.util.Date;
 import java.util.TreeSet;
 
 /**
- * Gli oggetti di questa classe rappresentano dei punti d'interesse
+ * Gli oggetti di questa classe rappresentano dei punti d'interesse. 
  * 
  * @author ulise
  */
 public class PointOfInterest {
 
+	/**
+	 *ContenEvents è una struttura dati TreeSet che contiene tutti gli eventi associati a un 
+	 *determinato punto d'interesse. In questo modo ogni punto d'interesse contiene li eventi
+	 *effettuati preso le sue vicinanze.
+	 */
 	private CoordinateGeografiche coordinate;
-	private String nome;
+	private String name;
 	private TreeSet<Event> contenEvents;
 	private int numberPoint;
 	private static int countPoint;
+	
 	/**
 	 * Definisco i tre punti d'interesse come costanti
 	 */
@@ -25,58 +31,60 @@ public class PointOfInterest {
 	private static final PointOfInterest POI2 = new PointOfInterest("Arco Della Pace", 45.473, 9.173);
 	private static final PointOfInterest POI3 = new PointOfInterest("Navigli", 45.458, 9.181);
 /**
- * 
- * @param nome
- * @param latitude
- * @param longitude
+ * Costruttutore della classe che permette di creare oggetti che rappresentano dei punti D'interessi
+ * @param nome - nome del punto d'interesse 
+ * @param latitude - la latitudine del punto d'interesse
+ * @param longitude - la longitudine del punto d'interesse
  */
-	public PointOfInterest(String nome, double latitude, double longitude) {
-		this.nome = nome;
+	public PointOfInterest(String name, double latitude, double longitude) {
+		this.name = name;
 		this.coordinate = new CoordinateGeografiche(latitude, longitude);
 		this.contenEvents = new TreeSet<>();
 		this.numberPoint = ++countPoint;
 	}
 /**
- * 
- * @return
+ * Restituisce il nome del punto d'interesse 
+ * @return String - nome del punto d'intesse
  */
 	public String getNome() {
-		return nome;
+		return name;
 	}
 
 	/**
-	 * 
-	 * @param nome
+	 * Setta il nome del punto d'interesse che esegue il metodo
+	 * @param nome 
 	 */
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setNome(String name) {
+		this.name = name;
 	}
 /**
  * 
- * @return
+ * @return CoordinateGeografic
  */
 	public CoordinateGeografiche getCordinate() {
 		return coordinate;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Restituisce il numero assocciato al punto d'interesse che esegue il metodo
+	 * @return int - Il numero del punto d'interesse che esegue il metodo
 	 */
 	public int getnumberPoint() {
 		return numberPoint;
 	}
-/**
- * 
- * @param e
- */
+
+	
+	/**
+	 * 
+	 * @param e - Parametri di tipo Event 
+	 */
 	public void addEvent(Event e) {
 		this.contenEvents.add(e);
 	}
     
 	/**
-	 * 
-	 * @return
+	 * getPoints è un metodo statico che restituisce i 3 punti d'interesse 
+	 * @return ArrayList<PointOfInterest> - La lista contenenti tutti i punti di interessi.
 	 */
 	public static ArrayList<PointOfInterest> getPoints() {
 		ArrayList<PointOfInterest> allpoints = new ArrayList<>();
@@ -87,17 +95,18 @@ public class PointOfInterest {
 
 	}
  /**
-  * 
-  * @return
+  * Restituisce tutti gli eventi associati al punto d'interesse che esegue il metodo.
+  * @return ArraList<Event> - Lista di eventi
   */
 	public ArrayList<Event> getListEvents() {
 		ArrayList<Event> eventlist = new ArrayList<Event>(contenEvents);
 		return eventlist;
 	}
  /**
-  * 
-  * @param datestart
-  * @param dateEnd
+  * calculateMap è un metodo statico che calcola e visualizza le Mappe emozionali. Questo metodo
+  * chiama la sotto-funzione "countStates" per il calcolo delle mappe emozionali.
+  * @param datestart - Data di inizio 
+  * @param dateEnd - Data di fine 
   */
 	public static void calculateMap(Date datestart, Date dateEnd) {
         ArrayList<String> allResult = new ArrayList<>();
@@ -113,16 +122,21 @@ public class PointOfInterest {
 		 }
 	}
  /**
+  * countState è un metodo privato che conta la quantità di occorrenze per ciascun stato 
+  * emozionale sia dei soli utenti attivi sia per tutti gli utenti (Attivi e non attivi - registrati e non più registrati)
+  * degli eventi effettuati tra la data Inizio e la data Fine.
+  * @param datestart - La data d'inizio dell'intervallo 
+  * @param dateEnd - Data di fine dell'intervallo.
+  * @return String - Risultato del calcolo della mappa emozionale Riguardante tutti gli eventi all'interno
+  * dell'intervallo. 
   * 
-  * @param datestart
-  * @param dateEnd
-  * @return
   */
 	private String countStates(Date datestart, Date dateEnd) {
 	
 		int countstate[] = new int[5];
 		int countstateAll[] = new int[5];
 		int activEvents = 0;
+		int allevents = 0;
 
 		for (int i = 0; i < countstate.length; i++) {
 			countstate[i] = 0;
@@ -136,6 +150,7 @@ public class PointOfInterest {
 				if (evento.getDate().after(datestart) || evento.getDate().equals(datestart)) {
 					switch (evento.getEmotion()) {
 					case "A":
+						allevents++;
 						countstateAll[0]++;
 						if (evento.getStateUser()) {
 							activEvents++;
@@ -143,6 +158,7 @@ public class PointOfInterest {
 						}
 						break;
 					case "F":
+						allevents++;
 						countstateAll[1]++;
 						if (evento.getStateUser()) {
 							activEvents++;
@@ -150,6 +166,7 @@ public class PointOfInterest {
 						}
 						break;
 					case "S":
+						allevents++;
 						countstateAll[2]++;
 						if (evento.getStateUser()) {
 							activEvents++;
@@ -157,6 +174,7 @@ public class PointOfInterest {
 						}
 						break;
 					case "T":
+						allevents++;
 						countstateAll[3]++;
 						if (evento.getStateUser()) {
 							activEvents++;
@@ -164,6 +182,7 @@ public class PointOfInterest {
 						}
 						break;
 					case "N":
+						allevents++;
 						countstateAll[4]++;
 						if (evento.getStateUser()) {
 							activEvents++;
@@ -177,16 +196,19 @@ public class PointOfInterest {
 	
 		calculateActiveMap(countstate, activEvents);
 	
-     	return calculateAllMap(countstateAll,this.contenEvents.size());
+     	return calculateAllMap(countstateAll,allevents);
 
 		
 
 	}
    
 	/**
-	 * 
-	 * @param states
-	 * @param events
+	 * calculateActiveMap è una funzione che calcola e stampa la Mappa Emozionale 
+	 * degli utenti attivi.
+	 * @param states - Array di interi. ogni posizione contiene la quantità di occorrenze per 
+	 * ciascun stato emozionale. La posizione 0 rappresenta la quantità di utenti Arrabbiati,
+	 * La posizione 1 la quantità di utenti Felici e cosi via....
+	 * @param events - Rappresenta il numero totale di utenti Attivi
 	 */
 	private void calculateActiveMap(int states[], int events) {
 
@@ -206,10 +228,14 @@ public class PointOfInterest {
 	}
 	
 	/**
-	 * 
-	 * @param states
-	 * @param events
-	 * @return
+	 * calculateAllMap è una funzione privata che calcola la mappa emozionale riguardanti tutti
+	 * gli eventi di un punto d'interesse. Una volta effettuato il calcolo restutisce in risultato in 
+	 * formatto di Stringa. 
+	 * @param states - Array di interi, ogni posizione contiene la quantità di occorrenze per 
+	 * ciascun stato emozionale. La posizione 0 rappresenta la quantità di utenti Arrabbiati,
+	 * La posizione 1 la quantità di utenti Felici e cosi via....
+	 * @param events - Quantità di eventi totali.
+	 * @return String - Risultato della mappa emozionale
 	 */
 	private String calculateAllMap(int states[], int events) {
 		String result="";
@@ -233,7 +259,7 @@ public class PointOfInterest {
 
 	@Override
 	public String toString() {
-		return "POI" + this.numberPoint + " [ nomee = " + nome + " " + " coordinate: " + coordinate.toString() + " ] ";
+		return "POI" + this.numberPoint + " [ nome = " + name + " " + " coordinate: " + coordinate.toString() + " ] ";
 	}
 
 }

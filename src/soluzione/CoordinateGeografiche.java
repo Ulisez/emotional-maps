@@ -29,7 +29,8 @@ public class CoordinateGeografiche{
 	}
 
 	/**
-	 * 
+	 * Riceve la latitudine e longitudine in formatto stringhe ed effettua una conversione
+	 * in formatto double 
 	 * @param latitude
 	 * @param longitude
 	 */
@@ -42,19 +43,34 @@ public class CoordinateGeografiche{
 		}
 
 	}
-
+    
+	/**
+	 * Restituisce la Latitudine del punto geografico
+	 * @return double - Latitudine della coordinata.
+	 */
 	public double getLatitude() {
 		return latitude;
 	}
-
+/**
+ * Modifica la latitudine della coordinata 
+ * @param latitude
+ */
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
-
+ 
+	/**
+	 * Restituisce la longitudine della coordinata geografica che esegue il metodo.
+	 * @return double - Restituisce la Longitudine del punto geografico.
+	 */
 	public double getLongitude() {
 		return longitude;
 	}
 
+	/**
+	 * Modifica la Longitudine della coordinata Geografica che esegue il medoto.
+	 * @param longitude
+	 */
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
@@ -71,6 +87,13 @@ public class CoordinateGeografiche{
 		return result;
 	}
 
+	/**
+	 * Permette di determinare se due coordinate sono uguali o meno. La coordinata geoagrafica
+	 * che esegue il metodo viene confrontata con un'altra coordinata passata come parametro.
+	 * Due coordinate sono uguali se hanno lo stesso valore di altitudine e longitudine, altrimenti 
+	 * sono diverse.
+	 * @return boolean - True se le coordinate sono uguali, False altrimenti.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -94,7 +117,7 @@ public class CoordinateGeografiche{
 	 * 
 	 * @param other rappresenta il punto geografico con nel quale calcolare la
 	 *              distanza
-	 * @return distanza in chilometri tra due punti geografici
+	 * @return double - Distanza in chilometri tra due punti geografici.
 	 */
 	public double distanceTo(CoordinateGeografiche other) {
 		double AVERAGE_RADIUS_OF_EARTH_KM = 6372.795477598;
@@ -117,6 +140,9 @@ public class CoordinateGeografiche{
 	}
 
 	@Override
+	/**
+	 * Visualizza i valori dei campi dell'ogetto che esegue il metodo. 
+	 */
 	public String toString() {
 		return " latitude = " + latitude + ", longitude = " + longitude;
 	}

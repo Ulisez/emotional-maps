@@ -153,17 +153,19 @@ public class Operations {
 	}
 
 	/**
-	 * Crea la mappa emozionale
-	 * 
-	 * @param fromdate
-	 * @param todate
+	 * Il metodo createMap riceve in ingresso le due date in formatto stringhe
+	 * e le converte in formatto Date. Se una delle due date non rispetta il formatto desiderato
+	 * il comando createMap non sarà eseguito. Inoltre prima di eseguire il calcolo 
+	 * della mappa emozionale viene controllato che la data d'inizio sia minore della data finale
+	 * se l'esito è negativo il comando createMap non sarà eseguito. 
+	 * @param fromdate - Data inizio dell'intervallo
+	 * @param todate - Data fine dell'intervallo
 	 */
 	private static void createMap(String fromdate, String todate) {
 
 		SimpleDateFormat formatDate = new SimpleDateFormat("ddMMyyyy");
 		Date start, end;
 		formatDate.setLenient(false);
-		//System.out.println(fromdate + "," + todate);
 
 		try {
 
@@ -219,8 +221,12 @@ public class Operations {
 		return distances;
 	}
  /**
-  * 
-  * @param e
+  * PutEvent è un metodo privato che assoccia un evento al punto d'interesse più vicino. 
+  * Effettua una serie di confronti fino a trovare il punto d'interesse più vicino, una volta
+  * trovato chiama il metodo addEvent del punto d'interesse che si occuppera di inserire l'evento
+  * all'interno della strutta dati che contiene gli eventi. Se
+  * l'evento dista più di 2.5 km da tutti i punti d'interesse non verrà associato a nessuno di essi.
+  * @param e - Evento da associare al punto d'interesse più vicino.
   */
 	private static void putEvent(Event e) {
 		double distancemax = 2.5;
